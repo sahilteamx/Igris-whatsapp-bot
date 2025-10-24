@@ -1,4 +1,10 @@
-const { default: makeWASocket, useMultiFileAuthState, fetchLatestBaileysVersion, DisconnectReason } = require('@whiskeysockets/baileys')
+const { 
+  default: makeWASocket, 
+  useMultiFileAuthState, 
+  fetchLatestBaileysVersion, 
+  DisconnectReason, 
+  usePairingCode 
+} = require('@whiskeysockets/baileys')
 const { join } = require("path")
 
 async function startIgris() {
@@ -7,8 +13,16 @@ async function startIgris() {
   const sock = makeWASocket({
     version,
     auth: state,
-    printQRInTerminal: true,
+    browser: ["IgrisBot","Chrome","4.0"],    // identity (QR nahi chahiye)
   })
+
+  // ===== PAIRING CODE BLOCK: (yahan apna number likho) =====
+  if (!state.creds?.registered) {
+    const phoneNumber = '918601600591'   // <-- Apna WhatsApp number likho (jaise 9199099... without +)
+    const code = await usePairingCode(sock, phoneNumber)
+    console.log('Pairing Code:', code)
+  }
+  // ========================================================
 
   sock.ev.on("creds.update", saveCreds)
   sock.ev.on("messages.upsert", async ({ messages }) => {
@@ -42,7 +56,7 @@ async function startIgris() {
     if (connection === "close" && lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut) {
       startIgris()
     } else if (connection === "open") {
-      console.log(`${botName} WhatsApp Bot connected!`)
+      console.log("Igris WhatsApp Bot connected!")
     }
   })
 }
