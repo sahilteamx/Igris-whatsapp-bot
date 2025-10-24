@@ -1,5 +1,3 @@
-// index.js
-
 const { default: makeWASocket, useMultiFileAuthState, fetchLatestBaileysVersion, DisconnectReason } = require('@whiskeysockets/baileys')
 const { join } = require("path")
 
@@ -17,43 +15,26 @@ async function startIgris() {
     const m = messages[0]
     if (!m.message) return
     const msg = m.message.conversation || m.message.extendedTextMessage?.text || ""
-
-    // Owner info & bot details
     const owner = "sahilteamx"
     const botName = "Igris"
-
-    // Simple commands
-    if (msg.toLocaleLowerCase().includes("hello")) {
+    if (msg.toLocaleLowerCase().includes("hello"))
       await sock.sendMessage(m.key.remoteJid, { text: `👋 Haan, main ${botName} bot hoon! Aapko kaise madad chahiye?` })
-    }
-    if (msg.toLocaleLowerCase() === "help") {
-      await sock.sendMessage(m.key.remoteJid, {
-        text: `*${botName} Bot Commands:*
+    if (msg.toLocaleLowerCase() === "help")
+      await sock.sendMessage(m.key.remoteJid, { text: `*${botName} Bot Commands:*
 1. hello
 2. menu
 3. owner
-4. emojis`
-      })
-    }
-    if (msg.toLocaleLowerCase() === "menu") {
-      await sock.sendMessage(m.key.remoteJid, {
-        text: `Menu List:
+4. emojis` })
+    if (msg.toLocaleLowerCase() === "menu")
+      await sock.sendMessage(m.key.remoteJid, { text: `Menu List:
 - hello
 - help
 - owner
-- emojis`
-      })
-    }
-    if (msg.toLocaleLowerCase() === "owner") {
-      await sock.sendMessage(m.key.remoteJid, {
-        text: `Bot Owner: ${owner}`
-      })
-    }
-    if (msg.toLocaleLowerCase() === "emojis") {
-      await sock.sendMessage(m.key.remoteJid, {
-        text: `🤖😎👍🔥😜`
-      })
-    }
+- emojis` })
+    if (msg.toLocaleLowerCase() === "owner")
+      await sock.sendMessage(m.key.remoteJid, { text: `Bot Owner: ${owner}` })
+    if (msg.toLocaleLowerCase() === "emojis")
+      await sock.sendMessage(m.key.remoteJid, { text: `🤖😎👍🔥😜` })
   })
 
   sock.ev.on("connection.update", (update) => {
